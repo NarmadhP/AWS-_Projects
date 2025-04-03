@@ -1,0 +1,34 @@
+version: 0.2
+
+env:
+  variables:
+    SAMPLE_VAR: "test-value"
+  parameter-store:
+    docker_usr: /python-app/docker_usrname
+    docker_psswd: /python-app/docker_passwd
+
+phases:
+  install:
+    runtime-versions:
+      python: 3.11
+    commands:
+      - echo "Installing dependencies..."
+      - apt-get update -y && apt-get install -y docker.io
+
+  pre_build:
+    commands:
+      - echo "Logging in to Docker..."
+      - echo "$docker_psswd" | docker login -u "$docker_usr" --password-stdin
+      - echo "Installing Python dependencies..."
+      - pip install -r simple_python_app/requirements.txt
+
+  build:
+    commands:
+      - cd simple_python_app
+      - echo "Starting Build"
+      - docker build -t narmadhp/simple-python-app:latest .
+      - docker push narmadhp/simple-python-app:latest
+
+  post_build:
+    commands:
+      - echo "Build Successful"
