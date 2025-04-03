@@ -28,3 +28,7 @@ Monitor and Audit
   2. we will deploy RDS in private subnet
   3. create a SG that allows only ec2 instance to connect
   4. we will enable IAM Authentication in RDS
+  5.  we can secure connection between instance and rds by
+        1. set both in private subnet and configure the SG
+        2. use NAT gateway
+        3. use VPC Peering
